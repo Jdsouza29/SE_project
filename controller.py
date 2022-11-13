@@ -24,6 +24,11 @@ cursor = connection.cursor(buffered=True)
 
 # SQL functions
 
+def createuser(username,password):
+    cmd = f"---"
+    # cursor.execute(cmd)
+    # cmd = None
+    return
 
 def checkUser(username, password=None):
     cmd = f"Select count(username) from login where username='{username}' and BINARY password='{password}'"
