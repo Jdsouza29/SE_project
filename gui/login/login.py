@@ -1,62 +1,93 @@
+import mysql.connector
 import streamlit as st
-# from user import login
-# Third change in april
+
+from gui.usermain.main import *
 from controller import *
-
-headerSection = st.container()
-mainSection = st.container()
-loginSection = st.container()
-logOutSection = st.container()
-
+from gui.login.createuser import *
+from gui.login.adminlog import *
 
 
 def login_Main():
-    login()
+    print("here")
+    login_user()
 
-
-class login():
-
-    def show_main_page(self):
-        with mainSection:
-            dataFile = st.text_input("Enter your Test file name: ")
-            Topics = st.text_input("Enter your Model Name: ")
-            ModelVersion = st.text_input("Enter your Model Version: ")
-            processingClicked = st.button ("Start Processing", key="processing")
-            if processingClicked:
-                st.balloons() 
-    
-    def LoggedOut_Clicked(self):
-        st.session_state['loggedIn'] = False
-        
-    def show_logout_page(self):
-        loginSection.empty();
-        with logOutSection:
-            st.button ("Log Out", key="logout", on_click=self.LoggedOut_Clicked)
-        
-    def LoggedIn_Clicked(self,userName, password):
-        if (userName - password):
-            st.session_state['loggedIn'] = True
-        else:
-            st.session_state['loggedIn'] = False
-            st.error("Invalid user name or password")
-        
-    def show_login_page(self):
-        with loginSection:
-            if st.session_state['loggedIn'] == False:
-                userName = st.text_input (label="", value="", placeholder="Enter your user name")
-                password = st.text_input (label="", value="",placeholder="Enter password", type="password")
-                st.button ("Login", on_click=self.LoggedIn_Clicked, args= (userName, password))
-
+class login_user():
     def __init__(self):
-        with headerSection:
-            st.title("Streamlit Application")
-            #first run will have nothing in session_state
-            if 'loggedIn' not in st.session_state:
-                st.session_state['loggedIn'] = False
-                self.show_login_page() 
+        self.show_login()
+
+
+
+    def LoggedIn_Clicked(self,userName,password):
+        if userName =='' or password=='':
+            st.error("Please enter all fields")
+            st.session_state['log']=0
+        elif login(userName,password):
+            st.session_state['log']=1
+            # st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("") 
+            # st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("")
+            # st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("")
+            # st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("")
+            # st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("")
+
+
+        
+            if st.sidebar.button("Logout"):
+                st.experimental_rerun()
+                del st.session_state['log']
+                st.experimental_rerun()
+                st.experimental_rerun()
+
+        else:
+            st.session_state['log']=0
+            st.info("Wrong login Credentials")
+
+
+    def create_user(self):
+        # CreateUser()
+        st.session_state['log'] =2
+    
+    def ad_login(self):
+        st.session_state['log']=3
+        # admin_login()
+
+
+    def show_login(self):
+        if 'log' not in st.session_state:
+            st.session_state['log']=0
+            st.title("Login Page")
+            userName = st.text_input (label=" ", value="", placeholder="Enter your user name")
+            password = st.text_input (label=" ", value="",placeholder="Enter password", type="password")
+            st.button ("Login", on_click=self.LoggedIn_Clicked, args= (userName, password))
+            st.button("Create_User",on_click=self.create_user)
+            st.button("Admin_Login",on_click=self.ad_login)
+        else:
+            if st.session_state['log']==2:
+                CreateUser()
+            elif st.session_state['log']==3:
+                admin_login()
+            elif st.session_state['log']==1:
+                # st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("") 
+                # st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("")
+                # st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("")
+                # st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("")
+                # st.sidebar.text("");st.sidebar.text("");st.sidebar.text("");st.sidebar.text("")
+
+
+            
+                # if st.sidebar.button("Logout"):
+                #     st.experimental_rerun()
+                #     del st.session_state['log']
+                #     st.experimental_rerun()
+                #     del st.session_state['new']
+                #     st.experimental_rerun()
+                user_main()
             else:
-                if st.session_state['loggedIn']:
-                    self.show_logout_page()    
-                    self.show_main_page()  
-                else:
-                    self.show_login_page()
+                st.session_state['log']=0
+                st.title("Login Page")
+                userName = st.text_input (label=" ", value="", placeholder="Enter your user name")
+                password = st.text_input (label=" ", value="",placeholder="Enter password", type="password")
+                st.button ("Login", on_click=self.LoggedIn_Clicked, args= (userName, password))
+                st.button("Create_User",on_click=self.create_user)
+                st.button("Admin_Login",on_click=self.ad_login)
+
+    
